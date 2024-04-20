@@ -1,0 +1,59 @@
+<div [ngClass]="darkMode ? 'dark' : ''">
+    <div class="bg-gradient-to-b from-catalina-blue-200 to-catalina-blue-500 min-h-screen dark:from-catalina-blue-700 dark:to-catalina-blue-950">
+        <!-- En-tête avec bouton de changement de thème -->
+        <div class="flex justify-end p-4">
+            <button class="focus:outline-none dark:bg-catalina-blue-200 dark:hover:bg-catalina-blue-100 hover:bg-catalina-blue-950 bg-catalina-blue-900 rounded-full p-2 shadow-md hover:shadow-lg transition-shadow duration-300" (click)="switchTheme()" [title]="darkMode ? 'Mode claire' : 'Mode sombre'">
+                <fa-icon *ngIf="darkMode" [icon]="faSun" style="color: rgb(234 179 8);" class="w-6 h-6 hidden dark:block"></fa-icon>
+                <fa-icon *ngIf="!darkMode" [icon]="faMoon" style="color: rgb(209 213 219);" class="w-6 h-6 block dark:hidden"></fa-icon>
+            </button>
+        </div>
+        <!-- Contenu principal -->
+        <div class="mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="flex flex-col text-center w-full mb-12">
+                <h1 class="text-4xl font-bold text-gray-800 dark:text-white shadow-sm">Anis Bahmani</h1>
+				<p class="mt-2 text-xl text-gray-600 dark:text-gray-300">Développeur Web Freelance à Paris</p>
+                <img src="assets/img/photo.jpeg" alt="photo" class="rounded-full mx-auto my-4">
+            </div>
+            <!-- Section Compétences -->
+            <div class="skills">
+                <h2 class="title">Compétences</h2>
+                <ul class="list-disc list-inside">
+                    <li class="text-lg text-gray-700 dark:text-gray-200 bg-blue-100 dark:bg-blue-800 rounded px-3 py-1">HTML, CSS, JavaScript</li>
+                    <li class="text-lg text-gray-700 dark:text-gray-200 bg-blue-100 dark:bg-blue-800 rounded px-3 py-1">Angular, React</li>
+                    <li class="text-lg text-gray-700 dark:text-gray-200 bg-blue-100 dark:bg-blue-800 rounded px-3 py-1">Node.js, Express</li>
+                    <li class="text-lg text-gray-700 dark:text-gray-200 bg-blue-100 dark:bg-blue-800 rounded px-3 py-1"><fa-icon [icon]="faDatabase"></fa-icon> MySQL, MongoDB</li>
+                </ul>
+            </div>
+            <!-- Section Expériences -->
+            <div>
+                <h2 class="title">Expériences</h2>
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-6" *ngFor="let experience of experiences">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{experience.role}}</h3>
+                    <p class="text-gray-500 dark:text-gray-400">{{experience.company}} - {{experience.period}}</p>
+                    <p class="text-gray-600 dark:text-gray-300">{{experience.description}}</p>
+                </div>
+            </div>
+            <!-- Section Projets -->
+            <div>
+                <h2 class="title">Projets</h2>
+                <div class="bg-gray-100 dark:bg-gray-700 rounded-lg shadow-lg p-4 mb-6" *ngFor="let project of projects">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">{{project.name}}</h3>
+                    <p class="text-gray-600 dark:text-gray-300">{{project.description}}</p>
+                    <a href="{{project.link}}" class="text-blue-500 hover:text-blue-600" target="_blank">Voir le projet</a>
+                </div>
+            </div>
+            <!-- Section Parcours -->
+            <div class="education">
+                <h2 class="title">Parcours</h2>
+                <p>Master en Informatique, Université de Paris - 2022</p>
+            </div>
+            <!-- Section Contact -->
+            <div class="flex items-center justify-start space-x-2">
+                <h2 class="title">Contact</h2>
+                <span><fa-icon [icon]="faEnvelope"></fa-icon></span>
+				<span class="text-gray-800 dark:text-white">anis&#64;example.com</span>
+                <p>Téléphone: +33 1 23 45 67 89</p>
+            </div>
+        </div>
+    </div>
+</div>
