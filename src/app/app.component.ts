@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faDatabase, faEnvelope, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
+import { faDatabase, faEnvelope, faMoon, faPhone, faSun } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +15,7 @@ export class AppComponent implements OnInit{
 	faSun = faSun;
   	faMoon = faMoon;
 	faEnvelope = faEnvelope;
+	faPhone = faPhone;
 	faDatabase = faDatabase;
 	darkMode: boolean = false;
 
