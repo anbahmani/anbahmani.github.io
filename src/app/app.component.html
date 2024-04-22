@@ -1,64 +1,69 @@
-<div [ngClass]="darkMode ? 'dark' : ''">
+<div class="scroll-container">
+  <div [ngClass]="darkMode ? 'dark' : ''">
     <div class="bg-gradient-to-b from-catalina-blue-200 to-catalina-blue-500 min-h-screen dark:from-catalina-blue-700 dark:to-catalina-blue-950">
-        <!-- En-tête avec bouton de changement de thème -->
-        <div class="flex justify-end p-4">
-            <button class="focus:outline-none dark:bg-catalina-blue-200 dark:hover:bg-catalina-blue-100 hover:bg-catalina-blue-950 bg-catalina-blue-900 rounded-full p-2 shadow-md hover:shadow-lg transition-shadow duration-300" (click)="switchTheme()" [title]="darkMode ? 'Mode claire' : 'Mode sombre'">
-                <fa-icon *ngIf="darkMode" [icon]="faSun" style="color: rgb(234 179 8);" class="w-6 h-6 hidden dark:block"></fa-icon>
-                <fa-icon *ngIf="!darkMode" [icon]="faMoon" style="color: rgb(209 213 219);" class="w-6 h-6 block dark:hidden"></fa-icon>
-            </button>
+      <!-- En-tête avec bouton de changement de thème -->
+      <div class="flex justify-end p-4 fixed top-0 right-0 w-full z-50">
+        <button class="focus:outline-none dark:bg-catalina-blue-200 dark:hover:bg-catalina-blue-100 hover:bg-catalina-blue-950 bg-catalina-blue-900 rounded-full p-2 shadow-md hover:shadow-lg transition-shadow duration-300" (click)="switchTheme()" [title]="darkMode ? 'Mode claire' : 'Mode sombre'">
+          <fa-icon *ngIf="darkMode" [icon]="faSun" style="color: rgb(234 179 8);" class="w-6 h-6 hidden dark:block"></fa-icon>
+          <fa-icon *ngIf="!darkMode" [icon]="faMoon" style="color: rgb(209 213 219);" class="w-6 h-6 block dark:hidden"></fa-icon>
+        </button>
+      </div>
+      <!-- Contenu principal -->
+      <div class="snap-section flex flex-col text-center w-full mb-12 bg-catalina-blue-50 dark:bg-catalina-blue-800 p-6 rounded-lg">
+        <h1 class="text-4xl font-bold text-catalina-blue-900 dark:text-catalina-blue-50">Anis Bahmani</h1>
+        <p class="mt-2 text-xl text-catalina-blue-700 dark:text-catalina-blue-200">Développeur Web Freelance à Paris</p>
+        <img src="assets/img/webp/photo.webp" alt="photo" class="rounded-full mx-auto my-4 border border-catalina-blue-300 dark:border-catalina-blue-700 w-64 h-64">
+      </div>
+      <!-- Section Compétences -->
+      <div class="snap-section skills bg-catalina-blue-100 dark:bg-catalina-blue-900 p-6 rounded-lg">
+        <h2 class="text-2xl text-catalina-blue-800 dark:text-catalina-blue-100">Compétences</h2>
+        <div class="list-disc list-inside space-y-2">
+          <p class="text-lg text-catalina-blue-700 dark:text-catalina-blue-200">
+            <fa-icon [icon]="faDisplay"></fa-icon> Angular, React, HTML, CSS, JavaScript
+          </p>
+          <p class="text-lg text-catalina-blue-700 dark:text-catalina-blue-200">
+            <fa-icon [icon]="faServer"></fa-icon> Node.js, Express
+          </p>
+          <p class="text-lg text-catalina-blue-700 dark:text-catalina-blue-200">
+            <fa-icon [icon]="faDatabase"></fa-icon> MySQL, MongoDB
+          </p>
         </div>
-        <!-- Contenu principal -->
-        <div class="mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="flex flex-col text-center w-full mb-12 bg-catalina-blue-50 dark:bg-catalina-blue-800 p-6 rounded-lg">
-                <h1 class="text-4xl font-bold text-catalina-blue-900 dark:text-catalina-blue-50">Anis Bahmani</h1>
-                <p class="mt-2 text-xl text-catalina-blue-700 dark:text-catalina-blue-200">Développeur Web Freelance à Paris</p>
-                <img src="assets/img/photo.jpeg" alt="photo" class="rounded-full mx-auto my-4 border border-catalina-blue-300 dark:border-catalina-blue-700">
-            </div>
-            <!-- Section Compétences -->
-            <div class="skills bg-catalina-blue-100 dark:bg-catalina-blue-900 p-6 rounded-lg">
-                <h2 class="text-2xl text-catalina-blue-800 dark:text-catalina-blue-100">Compétences</h2>
-                <ul class="list-disc list-inside space-y-2">
-                    <li class="text-lg text-catalina-blue-700 dark:text-catalina-blue-200">HTML, CSS, JavaScript</li>
-                    <li class="text-lg text-catalina-blue-700 dark:text-catalina-blue-200">Angular, React</li>
-                    <li class="text-lg text-catalina-blue-700 dark:text-catalina-blue-200">Node.js, Express</li>
-                    <li class="text-lg text-catalina-blue-700 dark:text-catalina-blue-200"><fa-icon [icon]="faDatabase"></fa-icon> MySQL, MongoDB</li>
-                </ul>
-            </div>
-            <!-- Section Expériences -->
-            <div class="experience bg-catalina-blue-50 dark:bg-catalina-blue-950 p-6 rounded-lg my-6">
-                <h2 class="text-2xl text-catalina-blue-800 dark:text-catalina-blue-100">Expériences</h2>
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-6" *ngFor="let experience of experiences">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{experience.role}}</h3>
-                    <p class="text-gray-500 dark:text-gray-400">{{experience.company}} - {{experience.period}}</p>
-                    <p class="text-gray-600 dark:text-gray-300">{{experience.description}}</p>
-                </div>
-            </div>
-            <!-- Section Projets -->
-            <div class="projects bg-catalina-blue-100 dark:bg-catalina-blue-900 p-6 rounded-lg">
-                <h2 class="text-2xl text-catalina-blue-800 dark:text-catalina-blue-100">Projets</h2>
-                <div class="bg-gray-100 dark:bg-gray-700 rounded-lg shadow-lg p-4 mb-6" *ngFor="let project of projects">
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">{{project.name}}</h3>
-                    <p class="text-gray-600 dark:text-gray-300">{{project.description}}</p>
-                    <a href="{{project.link}}" class="text-blue-500 hover:text-blue-600" target="_blank">Voir le projet</a>
-                </div>
-            </div>
-            <!-- Section Parcours -->
-            <div class="education bg-catalina-blue-50 dark:bg-catalina-blue-950 p-6 rounded-lg my-6">
-                <h2 class="text-2xl text-catalina-blue-800 dark:text-catalina-blue-100">Parcours</h2>
-                <p class="text-lg text-catalina-blue-700 dark:text-catalina-blue-200">Master en Informatique, Université de Paris - 2022</p>
-            </div>
-            <!-- Section Contact -->
-            <div class="contact bg-catalina-blue-100 dark:bg-catalina-blue-900 p-6 rounded-lg">
-                <h2 class="text-2xl text-catalina-blue-800 dark:text-catalina-blue-100">Contact</h2>
-                <a href="mailto:anis@example.com" class="flex items-center space-x-2 text-blue-600 hover:text-blue-800">
-					<fa-icon [icon]="faEnvelope"></fa-icon>
-					<span>anis&#64;example.com</span>
-				</a>
-				<a href="tel:+33123456789" class="flex items-center space-x-2 text-blue-600 hover:text-blue-800">
-					<fa-icon [icon]="faPhone"></fa-icon>
-					<span>+33 1 23 45 67 89</span>
-				</a>
-            </div>
+      </div>
+      <!-- Section Expériences -->
+      <div class="snap-section experience bg-catalina-blue-50 dark:bg-catalina-blue-950 p-6 rounded-lg my-6">
+        <h2 class="text-2xl text-catalina-blue-800 dark:text-catalina-blue-100">Expériences</h2>
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-6" *ngFor="let experience of experiences">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{experience.role}}</h3>
+          <p class="text-gray-500 dark:text-gray-400">{{experience.company}} - {{experience.period}}</p>
+          <p class="text-gray-600 dark:text-gray-300">{{experience.description}}</p>
         </div>
+      </div>
+      <!-- Section Projets -->
+      <div class="snap-section projects bg-catalina-blue-100 dark:bg-catalina-blue-900 p-6 rounded-lg">
+        <h2 class="text-2xl text-catalina-blue-800 dark:text-catalina-blue-100">Projets</h2>
+        <div class="bg-gray-100 dark:bg-gray-700 rounded-lg shadow-lg p-4 mb-6" *ngFor="let project of projects">
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white">{{project.name}}</h3>
+          <p class="text-gray-600 dark:text-gray-300">{{project.description}}</p>
+          <a href="{{project.link}}" class="text-blue-500 hover:text-blue-600" target="_blank">Voir le projet</a>
+        </div>
+      </div>
+      <!-- Section Parcours -->
+      <div class="snap-section education bg-catalina-blue-50 dark:bg-catalina-blue-950 p-6 rounded-lg my-6">
+        <h2 class="text-2xl text-catalina-blue-800 dark:text-catalina-blue-100">Parcours</h2>
+        <p class="text-lg text-catalina-blue-700 dark:text-catalina-blue-200">Master en Informatique, Université de Paris - 2022</p>
+      </div>
+      <!-- Section Contact -->
+      <div class="snap-section contact bg-catalina-blue-100 dark:bg-catalina-blue-900 p-6 rounded-lg">
+        <h2 class="text-2xl text-catalina-blue-800 dark:text-catalina-blue-100">Contact</h2>
+        <a href="mailto:anis@example.com" class="flex items-center space-x-2 text-blue-600 hover:text-blue-800">
+          <fa-icon [icon]="faEnvelope"></fa-icon>
+          <span>anis&#64;example.com</span>
+        </a>
+        <a href="tel:+33123456789" class="flex items-center space-x-2 text-blue-600 hover:text-blue-800">
+          <fa-icon [icon]="faPhone"></fa-icon>
+          <span>+33 1 23 45 67 89</span>
+        </a>
+      </div>
     </div>
+  </div>
 </div>
