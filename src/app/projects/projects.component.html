@@ -1,0 +1,8 @@
+<div class="snap-section projects bg-gradient-to-b from-catalina-blue-500 to-catalina-blue-200 min-h-screen dark:from-catalina-blue-950 dark:to-catalina-blue-700 p-6">
+	<h2 class="text-2xl text-catalina-blue-950 dark:text-catalina-blue-100">Projets</h2>
+	<div class="bg-gray-100 dark:text-catalina-blue-200 rounded-lg shadow-lg p-4 mb-6" *ngFor="let project of projects">
+	  <h3 class="text-xl font-semibold text-catalina-blue-950 dark:text-catalina-blue-200">{{project.name}}</h3>
+	  <p class="text-catalina-blue-950 dark:text-catalina-blue-200">{{project.description}}</p>
+	  <a href="{{project.link}}" class="text-blue-900 hover:text-blue-950" target="_blank">Voir le projet</a>
+	</div>
+</div>

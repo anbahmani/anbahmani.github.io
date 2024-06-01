@@ -1,0 +1,8 @@
+<div class="snap-section experience bg-gradient-to-b from-catalina-blue-200 to-catalina-blue-500 min-h-screen dark:from-catalina-blue-700 dark:to-catalina-blue-950 p-6">
+	<h2 class="text-2xl text-catalina-blue-950 dark:text-catalina-blue-100">Expériences</h2>
+	<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-6" *ngFor="let experience of experiences">
+	  <h3 class="text-lg font-semibold text-catalina-blue-950 dark:text-catalina-blue-100">{{experience.role}}</h3>
+	  <p class="text-catalina-blue-950 dark:text-catalina-blue-100">{{experience.company}} - {{experience.period}}</p>
+	  <p class="text-catalina-blue-950 dark:text-catalina-blue-100">{{experience.description}}</p>
+	</div>
+</div>

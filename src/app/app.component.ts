@@ -3,32 +3,24 @@ import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faDatabase, faDisplay, faEnvelope, faMoon, faPhone, faServer, faSun } from '@fortawesome/free-solid-svg-icons';
+import { ContactComponent } from "./contact/contact.component";
+import { EducationComponent } from "./education/education.component";
+import { ProjectsComponent } from "./projects/projects.component";
+import { ExperienceComponent } from "./experience/experience.component";
+import { SkillsComponent } from "./skills/skills.component";
+import { DescriptionComponent } from "./description/description.component";
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet, FontAwesomeModule, CommonModule],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+    selector: 'app-root',
+    standalone: true,
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.css',
+    imports: [RouterOutlet, FontAwesomeModule, CommonModule, ContactComponent, EducationComponent, ProjectsComponent, ExperienceComponent, SkillsComponent, DescriptionComponent]
 })
 export class AppComponent implements OnInit{
 	faSun = faSun;
   	faMoon = faMoon;
-	faEnvelope = faEnvelope;
-	faPhone = faPhone;
-	faDatabase = faDatabase;
-	faServer = faServer;
-	faDisplay = faDisplay;
 	darkMode: boolean = false;
-
-	public experiences = [
-        { role: 'Développeur Fullstack', company: 'TechCompany', period: '2021 - Présent', description: 'Développement de solutions web avec Angular et Node.js.' },
-        // Autres expériences...
-    ];
-    public projects = [
-        { name: 'Projet 1', description: 'Application web pour la gestion des tâches', link: 'http://example.com' },
-        // Autres projets...
-    ];
 
 	ngOnInit(): void {
 		this.switchToLight();
