@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TP JAX-RS</title>
+<style>
+  :root{
+    --bg:#0f172a;
+    --card:#111827;
+    --ink:#e5e7eb;
+    --muted:#9ca3af;
+    --accent:#38bdf8;
+    --accent-2:#a78bfa;
+    --ok:#22c55e;
+    --warn:#f59e0b;
+
+    --code-bg:#0b1222;
+    --code-border:rgba(148,163,184,.25);
+    --border:rgba(148,163,184,.2);
+    --hint-border:rgba(148,163,184,.35);
+  }
+  [data-theme="light"]{
+    --bg:#f7fafc;
+    --card:#ffffff;
+    --ink:#0f172a;
+    --muted:#4b5563;
+    --accent:#2563eb;
+    --accent-2:#7c3aed;
+    --ok:#16a34a;
+    --warn:#d97706;
+
+    --code-bg:#f3f4f6;
+    --code-border:#e5e7eb;
+    --border:#e5e7eb;
+    --hint-border:#e5e7eb;
+  }
+
+  /* Fond par défaut (sombre) avec dégradé */
+  html,body{margin:0;padding:0;background:linear-gradient(180deg,#0b1022, var(--bg));color:var(--ink);font:16px/1.6 system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+  /* 🔆 En mode clair : fond uni, sans dégradé */
+  [data-theme="light"] html,
+  [data-theme="light"] body{
+    background: var(--bg) !important;
+    background-image: none !important;
+  }
+
+  .wrap{max-width:900px;margin:40px auto;padding:0 16px}
+  header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px}
+  .title{font-size:28px;font-weight:700;letter-spacing:.3px}
+  .muted{color:var(--muted);font-size:14px;margin-top:-2px}
+  .btn{background:transparent;border:1px solid var(--accent-2);color:var(--accent-2);padding:8px 12px;border-radius:10px;cursor:pointer}
+  .btn:hover{background:rgba(31,37,63,.15)}
+  section.card{background:rgba(17,24,39,.7);border:1px solid var(--border);backdrop-filter: blur(6px); padding:20px;border-radius:16px;margin:14px 0}
+  [data-theme="light"] section.card{background:var(--card)}
+  h2{font-size:20px;margin:0 0 6px 0}
+  details{border:1px dashed var(--hint-border);border-radius:12px;padding:10px 12px;margin-top:10px}
+  summary{cursor:pointer;font-weight:600;color:var(--accent)}
+  details[open] summary{color:var(--accent-2)}
+  code,pre{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace}
+  a{color:var(--accent-2);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .hint{color:var(--muted)}
+  .ide{border:1px solid var(--code-border);border-radius:12px;overflow:hidden;background:var(--code-bg)}
+  .ide__topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--code-border);background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(0,0,0,.05))}
+  .ide__title{display:flex;align-items:center;gap:8px}
+  .ide__dots{display:inline-flex;gap:6px}
+  .ide__dot{width:10px;height:10px;border-radius:50%}
+  .ide__dot--red{background:#ef4444}
+  .ide__dot--yellow{background:#f59e0b}
+  .ide__dot--green{background:#22c55e}
+  .ide__buttons{display:flex;gap:8px}
+  .btn--tiny{padding:6px 10px;border-radius:8px;font-size:13px}
+  pre.ide__code{margin:0;padding:14px;overflow:auto}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="title">TP JAX-RS</div>
+      <div class="muted">API REST avec JAX-RS, JSON, Validation, Filtres, Sécurité, OpenAPI</div>
+    </div>
+    <div class="toolbar">
+      <button id="themeToggle" class="btn" aria-label="Basculer thème">Thème : Auto</button>
+    </div>
+  </header>
+
+  <!-- ===== OBJECTIFS ===== -->
+  <section class="card">
+    <h2>Objectifs</h2>
+    <ul>
+      <li>Exposer des endpoints REST avec <strong>JAX-RS</strong>.</li>
+      <li>Sérialiser / désérialiser du <strong>JSON</strong> (Jackson).</li>
+      <li>Valider les entrées (Bean Validation) et gérer les erreurs.</li>
+      <li>Instrumenter l’API avec <strong>Filtres</strong> et <strong>Intercepteurs</strong>.</li>
+      <li>Sécuriser via <strong>clé API</strong>.</li>
+      <li>Vérifier avec <strong>tests</strong> et documenter avec <strong>OpenAPI</strong>.</li>
+    </ul>
+  </section>
+
+  <!-- ===== PRÉREQUIS & DÉMARRAGE ===== -->
+  <section class="card">
+    <h2>Prérequis & Démarrage</h2>
+    <p>Assurez-vous d’avoir <strong>JDK 21</strong> et <strong>Maven 3.9+</strong> installés. Démarrez le projet avec :</p>
+
+    <div class="ide">
+      <div class="ide__topbar">
+        <div class="ide__title"></div>
+        <div class="ide__buttons">
+          <button class="btn btn--tiny" id="copyCmd">📋 Copier</button>
+        </div>
+      </div>
+      <pre class="ide__code"><code id="cmdText">mvn exec:java
+mvn clean package</code></pre>
+    </div>
+
+    <p class="muted">Astuce : Ouvrez un deuxième terminal pour envoyer des requêtes pendant que le serveur tourne.</p>
+  </section>
+
+  <!-- ===== EXERCICES ===== -->
+  <section class="card">
+    <h2>Exercice 1 — Endpoint paramétré</h2>
+    <p>Créer un endpoint saluant un utilisateur par son nom via un log.</p>
+    <details>
+      <summary>💡 Indice</summary>
+      <div class="hint">
+        Utilisez les annotations <a href="https://jakarta.ee/specifications/restful-ws/3.1/apidocs/jakarta.ws.rs/jakarta/ws/rs/package-summary.html" target="_blank">@Path</a> et <a href="https://jakarta.ee/specifications/restful-ws/3.1/apidocs/jakarta.ws.rs/jakarta/ws/rs/PathParam.html" target="_blank">@PathParam</a>.
+      </div>
+    </details>
+  </section>
+
+  <section class="card">
+    <h2>Exercice 2 — Sérialisation JSON</h2>
+    <p>Envoyer un objet JSON pour créer une ressource.</p>
+    <details>
+      <summary>💡 Indice</summary>
+      <div class="hint">
+        Consultez <a href="https://eclipse-ee4j.github.io/jersey.github.io/documentation/latest/media.html#d0e8619" target="_blank">Media & JSON (Jersey)</a> pour comprendre la sérialisation via Jackson.
+      </div>
+    </details>
+  </section>
+
+  <section class="card">
+    <h2>Exercice 3 — Validation</h2>
+    <p>Ajouter des contraintes de validation et observer les erreurs.</p>
+    <details>
+      <summary>💡 Indice</summary>
+      <div class="hint">
+        Explorez <a href="https://jakarta.ee/specifications/bean-validation/3.0/apidocs/jakarta/validation/constraints/package-summary.html" target="_blank">jakarta.validation.constraints</a> (ex. : <code>@NotBlank</code>, <code>@Email</code>, <code>@Size</code>).
+      </div>
+    </details>
+  </section>
+
+  <section class="card">
+    <h2>Exercice 4 — Gestion d’erreurs</h2>
+    <p>Uniformiser la réponse d’erreur en JSON.</p>
+    <details>
+      <summary>💡 Indice</summary>
+      <div class="hint">
+        Voir <a href="https://eclipse-ee4j.github.io/jersey.github.io/documentation/latest/representations.html#d0e7800" target="_blank">ExceptionMapper (Jersey)</a> pour capturer et formater les erreurs globalement.
+      </div>
+    </details>
+  </section>
+
+  <section class="card">
+    <h2>Exercice 5 — Filtres &amp; Intercepteurs</h2>
+    <p>Tracer les requêtes et mesurer le temps de réponse.</p>
+    <details>
+      <summary>💡 Indice</summary>
+      <div class="hint">
+        Consultez <a href="https://eclipse-ee4j.github.io/jersey.github.io/documentation/latest/filters-and-interceptors.html" target="_blank">Filters and Interceptors (Jersey)</a>.
+      </div>
+    </details>
+  </section>
+
+  <section class="card">
+    <h2>Exercice 6 — Sécurité par clé API</h2>
+    <p>Refuser l’accès si la clé est absente ou invalide.</p>
+    <details>
+      <summary>💡 Indice</summary>
+      <div class="hint">
+        Inspirez-vous de <a href="https://eclipse-ee4j.github.io/jersey.github.io/documentation/latest/security.html" target="_blank">Security Filters (Jersey)</a> et lisez <a href="https://jakarta.ee/specifications/restful-ws/3.1/apidocs/jakarta.ws.rs/jakarta/ws/rs/core/HttpHeaders.html" target="_blank">HttpHeaders</a>.
+      </div>
+    </details>
+  </section>
+
+  <section class="card">
+    <h2>Exercice 7 — Tests automatisés</h2>
+    <p>Écrire un test qui crée puis récupère une ressource.</p>
+    <details>
+      <summary>💡 Indice</summary>
+      <div class="hint">
+        Parcourez la doc de <a href="https://rest-assured.io/" target="_blank">RestAssured</a> (statuts HTTP, assertions sur JSON).
+      </div>
+    </details>
+  </section>
+
+  <section class="card">
+    <h2>Exercice 8 — OpenAPI</h2>
+    <p>Documenter les endpoints et vérifier la spec générée.</p>
+    <details>
+      <summary>💡 Indice</summary>
+      <div class="hint">
+        Utilisez les annotations <a href="https://github.com/swagger-api/swagger-core/wiki/Swagger-2.X---Annotations" target="_blank">Swagger Core</a> (<code>@Operation</code>, <code>@ApiResponse</code>) et la <a href="https://swagger.io/specification/" target="_blank">spécification OpenAPI</a>.
+      </div>
+    </details>
+  </section>
+</div>
+
+<script>
+  // Thème (auto + toggle + persistance)
+  (function(){
+    const key = 'theme-preference';
+    const saved = localStorage.getItem(key);
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initial = saved || (prefersDark ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', initial);
+    updateBtn(initial);
+
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const cur = document.documentElement.getAttribute('data-theme');
+      const next = cur === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem(key, next);
+      updateBtn(next);
+    });
+
+    function updateBtn(mode){
+      const btn = document.getElementById('themeToggle');
+      btn.textContent = 'Thème : ' + (mode === 'dark' ? 'Sombre' : 'Clair');
+    }
+  })();
+
+  (function(){
+    const btn = document.getElementById('copyCmd');
+    const code = document.getElementById('cmdText');
+    if(!btn) return;
+    btn.addEventListener('click', async ()=>{
+      try{
+        await navigator.clipboard.writeText(code.innerText);
+        btn.textContent = '✅ Copié';
+        setTimeout(()=>btn.textContent='📋 Copier',1200);
+      }catch(e){
+        alert('Copie non supportée');
+      }
+    });
+  })();
+</script>
+</body>
+</html>
