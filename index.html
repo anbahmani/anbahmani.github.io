@@ -3,249 +3,143 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>TP JAX-RS</title>
+<title>TP — Jakarta Messaging (JMS) avec Apache ActiveMQ Artemis</title>
 <style>
   :root{
-    --bg:#0f172a;
-    --card:#111827;
-    --ink:#e5e7eb;
-    --muted:#9ca3af;
-    --accent:#38bdf8;
-    --accent-2:#a78bfa;
-    --ok:#22c55e;
-    --warn:#f59e0b;
-
-    --code-bg:#0b1222;
-    --code-border:rgba(148,163,184,.25);
-    --border:rgba(148,163,184,.2);
-    --hint-border:rgba(148,163,184,.35);
+    --bg:#0f172a; --card:#111827; --ink:#e5e7eb; --muted:#9ca3af;
+    --accent:#38bdf8; --accent2:#a78bfa; --ok:#22c55e; --warn:#f59e0b;
+    --code-bg:#0b1222; --code-border:rgba(148,163,184,.25); --border:rgba(148,163,184,.2);
   }
   [data-theme="light"]{
-    --bg:#f7fafc;
-    --card:#ffffff;
-    --ink:#0f172a;
-    --muted:#4b5563;
-    --accent:#2563eb;
-    --accent-2:#7c3aed;
-    --ok:#16a34a;
-    --warn:#d97706;
-
-    --code-bg:#f3f4f6;
-    --code-border:#e5e7eb;
-    --border:#e5e7eb;
-    --hint-border:#e5e7eb;
+    --bg:#f7fafc; --card:#fff; --ink:#0f172a; --muted:#4b5563;
+    --accent:#2563eb; --accent2:#7c3aed; --ok:#16a34a; --warn:#d97706;
+    --code-bg:#f3f4f6; --code-border:#e5e7eb; --border:#e5e7eb;
   }
-
-  /* Fond par défaut (sombre) avec dégradé */
-  html,body{margin:0;padding:0;background:linear-gradient(180deg,#0b1022, var(--bg));color:var(--ink);font:16px/1.6 system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-  /* 🔆 En mode clair : fond uni, sans dégradé */
-  [data-theme="light"] html,
-  [data-theme="light"] body{
-    background: var(--bg) !important;
-    background-image: none !important;
-  }
-
-  .wrap{max-width:900px;margin:40px auto;padding:0 16px}
-  header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px}
-  .title{font-size:28px;font-weight:700;letter-spacing:.3px}
-  .muted{color:var(--muted);font-size:14px;margin-top:-2px}
-  .btn{background:transparent;border:1px solid var(--accent-2);color:var(--accent-2);padding:8px 12px;border-radius:10px;cursor:pointer}
-  .btn:hover{background:rgba(31,37,63,.15)}
-  section.card{background:rgba(17,24,39,.7);border:1px solid var(--border);backdrop-filter: blur(6px); padding:20px;border-radius:16px;margin:14px 0}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:980px;margin:28px auto;padding:0 16px}
+  header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
+  .title{font-size:28px;font-weight:700}
+  .toolbar .btn{background:transparent;border:1px solid var(--accent2);color:var(--accent2);padding:8px 12px;border-radius:10px;cursor:pointer}
+  .btn:hover{background:rgba(99,102,241,.1)}
+  section.card{background:rgba(17,24,39,.7);border:1px solid var(--border);backdrop-filter: blur(6px); padding:18px;border-radius:16px;margin:14px 0}
   [data-theme="light"] section.card{background:var(--card)}
   h2{font-size:20px;margin:0 0 6px 0}
-  details{border:1px dashed var(--hint-border);border-radius:12px;padding:10px 12px;margin-top:10px}
+  p,li{font-size:16px}
+  details{border:1px dashed var(--border);border-radius:12px;padding:10px 12px;margin-top:10px}
   summary{cursor:pointer;font-weight:600;color:var(--accent)}
-  details[open] summary{color:var(--accent-2)}
+  details[open] summary{color:var(--accent2)}
   code,pre{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace}
-  a{color:var(--accent-2);text-decoration:none}
-  a:hover{text-decoration:underline}
-  .hint{color:var(--muted)}
-  .ide{border:1px solid var(--code-border);border-radius:12px;overflow:hidden;background:var(--code-bg)}
-  .ide__topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--code-border);background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(0,0,0,.05))}
-  .ide__title{display:flex;align-items:center;gap:8px}
-  .ide__dots{display:inline-flex;gap:6px}
-  .ide__dot{width:10px;height:10px;border-radius:50%}
-  .ide__dot--red{background:#ef4444}
-  .ide__dot--yellow{background:#f59e0b}
-  .ide__dot--green{background:#22c55e}
-  .ide__buttons{display:flex;gap:8px}
-  .btn--tiny{padding:6px 10px;border-radius:8px;font-size:13px}
-  pre.ide__code{margin:0;padding:14px;overflow:auto}
+  .ide{border:1px solid var(--code-border);border-radius:12px;overflow:hidden;background:var(--code-bg);margin-top:8px}
+  .ide__topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--code-border)}
+  .btn--tiny{padding:6px 10px;border-radius:8px;font-size:13px;border:1px solid var(--accent2);color:var(--accent2);background:transparent;cursor:pointer}
+  pre{margin:0;padding:14px;overflow:auto}
+  a{color:var(--accent2);text-decoration:none} a:hover{text-decoration:underline}
+  .muted{color:var(--muted);font-size:14px}
+  ul.tight>li{margin:4px 0}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="wrap" id="app">
   <header>
     <div>
-      <div class="title">TP JAX-RS</div>
-      <div class="muted">API REST avec JAX-RS, JSON, Validation, Filtres, Sécurité, OpenAPI</div>
+      <div class="title">TP — Jakarta Messaging (JMS) </div>
+      <div class="muted">Files (Queues), Topics, JMSContext, ACK, Transactions, DLQ</div>
     </div>
     <div class="toolbar">
-      <button id="themeToggle" class="btn" aria-label="Basculer thème">Thème : Auto</button>
+      <button id="themeToggle" class="btn">Thème : Auto</button>
     </div>
   </header>
 
-  <!-- ===== OBJECTIFS ===== -->
   <section class="card">
     <h2>Objectifs</h2>
-    <ul>
-      <li>Exposer des endpoints REST avec <strong>JAX-RS</strong>.</li>
-      <li>Sérialiser / désérialiser du <strong>JSON</strong> (Jackson).</li>
-      <li>Valider les entrées (Bean Validation) et gérer les erreurs.</li>
-      <li>Instrumenter l’API avec <strong>Filtres</strong> et <strong>Intercepteurs</strong>.</li>
-      <li>Sécuriser via <strong>clé API</strong>.</li>
-      <li>Vérifier avec <strong>tests</strong> et documenter avec <strong>OpenAPI</strong>.</li>
+    <ul class="tight">
+      <li>Se connecter à un broker Apache Artemis et envoyer/recevoir des messages via <strong>JMSContext</strong>.</li>
+      <li>Comprendre <strong>Queue</strong> (point-à-point) et <strong>Topic</strong> (publish/subscribe).</li>
+      <li>Expérimenter <strong>ACK</strong>, <strong>transactions</strong> et <strong>DLQ</strong>.</li>
     </ul>
   </section>
 
-  <!-- ===== PRÉREQUIS & DÉMARRAGE ===== -->
   <section class="card">
     <h2>Prérequis & Démarrage</h2>
-    <p>Assurez-vous d’avoir <strong>JDK 21</strong> et <strong>Maven 3.9+</strong> installés. Démarrez le projet avec :</p>
-
+    <p>Cloner/générer le starter et lancer un premier test :</p>
     <div class="ide">
       <div class="ide__topbar">
-        <div class="ide__title"></div>
-        <div class="ide__buttons">
-          <button class="btn btn--tiny" id="copyCmd">📋 Copier</button>
-        </div>
+        <span>Commandes</span>
+        <button class="btn--tiny" id="copyCmd">Copier</button>
       </div>
-      <pre class="ide__code"><code id="cmdText">mvn exec:java
-mvn clean package</code></pre>
+      <pre><code id="cmdText">mvn clean package
+mvn -Dexec.mainClass="com.example.jmsdemo.ConsumerApp" -DBROKER_URL="tcp://HOST:443" exec:java
+# dans un second terminal :
+mvn -Dexec.mainClass="com.example.jmsdemo.ProducerApp" -DBROKER_URL="tcp://HOST:443" -Dexec.args="5" exec:java</code></pre>
     </div>
-
-    <p class="muted">Astuce : Ouvrez un deuxième terminal pour envoyer des requêtes pendant que le serveur tourne.</p>
+    <p class="muted">Remplacez <code>HOST</code> par l'URL local ou l'IP du broker Artemis configuré par l'enseignant.</p>
   </section>
 
-  <!-- ===== EXERCICES ===== -->
   <section class="card">
-    <h2>Exercice 1 — Endpoint paramétré</h2>
-    <p>Créer un endpoint saluant un utilisateur par son nom via un log.</p>
+    <h2>Exercice 1 — Producteur & Consommateur</h2>
+    <p>Envoyer un JSON “commande” depuis le producteur, le consommer et afficher un traitement simulé.</p>
     <details>
-      <summary>💡 Indice</summary>
-      <div class="hint">
-        Utilisez les annotations <a href="https://jakarta.ee/specifications/restful-ws/3.1/apidocs/jakarta.ws.rs/jakarta/ws/rs/package-summary.html" target="_blank">@Path</a> et <a href="https://jakarta.ee/specifications/restful-ws/3.1/apidocs/jakarta.ws.rs/jakarta/ws/rs/PathParam.html" target="_blank">@PathParam</a>.
-      </div>
+      <summary>Indice</summary>
+      <div>Utiliser <code>JMSContext</code>, <code>createQueue</code>, <code>createProducer().send(...)</code> et <code>receiveBody(String.class)</code>.</div>
     </details>
   </section>
 
   <section class="card">
-    <h2>Exercice 2 — Sérialisation JSON</h2>
-    <p>Envoyer un objet JSON pour créer une ressource.</p>
+    <h2>Exercice 2 — ACK & Transactions</h2>
+    <p>Comparer <code>AUTO_ACKNOWLEDGE</code>, <code>CLIENT_ACKNOWLEDGE</code> et <code>SESSION_TRANSACTED</code> (commit/rollback).</p>
     <details>
-      <summary>💡 Indice</summary>
-      <div class="hint">
-        Consultez <a href="https://eclipse-ee4j.github.io/jersey.github.io/documentation/latest/media.html#d0e8619" target="_blank">Media & JSON (Jersey)</a> pour comprendre la sérialisation via Jackson.
-      </div>
+      <summary>Indice</summary>
+      <div>ACK manuel : <code>msg.acknowledge()</code>. Transactionnel côté producteur : <code>createContext(JMSContext.SESSION_TRANSACTED)</code> + <code>commit()</code>.</div>
     </details>
   </section>
 
   <section class="card">
-    <h2>Exercice 3 — Validation</h2>
-    <p>Ajouter des contraintes de validation et observer les erreurs.</p>
+    <h2>Exercice 3 — DLQ & Erreurs</h2>
+    <p>Simuler une erreur de traitement (exception) et observer les re-livraisons puis l’envoi en DLQ selon la politique du broker.</p>
     <details>
-      <summary>💡 Indice</summary>
-      <div class="hint">
-        Explorez <a href="https://jakarta.ee/specifications/bean-validation/3.0/apidocs/jakarta/validation/constraints/package-summary.html" target="_blank">jakarta.validation.constraints</a> (ex. : <code>@NotBlank</code>, <code>@Email</code>, <code>@Size</code>).
-      </div>
+      <summary>Indice</summary>
+      <div>Lever une exception après réception. Sans ACK/commit, le message est re-livré puis routé vers la DLQ (config côté Artemis).</div>
     </details>
   </section>
 
   <section class="card">
-    <h2>Exercice 4 — Gestion d’erreurs</h2>
-    <p>Uniformiser la réponse d’erreur en JSON.</p>
+    <h2>(Bonus) Exercice 4 — Topic & Abonnements durables</h2>
+    <p>Lancer deux abonnés durables sur un Topic et publier un message : les deux doivent le recevoir.</p>
     <details>
-      <summary>💡 Indice</summary>
-      <div class="hint">
-        Voir <a href="https://eclipse-ee4j.github.io/jersey.github.io/documentation/latest/representations.html#d0e7800" target="_blank">ExceptionMapper (Jersey)</a> pour capturer et formater les erreurs globalement.
-      </div>
+      <summary>Indice</summary>
+      <div>Abonné durable : <code>setClientID</code> + <code>createDurableConsumer(topic, "subName")</code>.</div>
     </details>
   </section>
 
-  <section class="card">
-    <h2>Exercice 5 — Filtres &amp; Intercepteurs</h2>
-    <p>Tracer les requêtes et mesurer le temps de réponse.</p>
-    <details>
-      <summary>💡 Indice</summary>
-      <div class="hint">
-        Consultez <a href="https://eclipse-ee4j.github.io/jersey.github.io/documentation/latest/filters-and-interceptors.html" target="_blank">Filters and Interceptors (Jersey)</a>.
-      </div>
-    </details>
-  </section>
-
-  <section class="card">
-    <h2>Exercice 6 — Sécurité par clé API</h2>
-    <p>Refuser l’accès si la clé est absente ou invalide.</p>
-    <details>
-      <summary>💡 Indice</summary>
-      <div class="hint">
-        Inspirez-vous de <a href="https://eclipse-ee4j.github.io/jersey.github.io/documentation/latest/security.html" target="_blank">Security Filters (Jersey)</a> et lisez <a href="https://jakarta.ee/specifications/restful-ws/3.1/apidocs/jakarta.ws.rs/jakarta/ws/rs/core/HttpHeaders.html" target="_blank">HttpHeaders</a>.
-      </div>
-    </details>
-  </section>
-
-  <section class="card">
-    <h2>Exercice 7 — Tests automatisés</h2>
-    <p>Écrire un test qui crée puis récupère une ressource.</p>
-    <details>
-      <summary>💡 Indice</summary>
-      <div class="hint">
-        Parcourez la doc de <a href="https://rest-assured.io/" target="_blank">RestAssured</a> (statuts HTTP, assertions sur JSON).
-      </div>
-    </details>
-  </section>
-
-  <section class="card">
-    <h2>Exercice 8 — OpenAPI</h2>
-    <p>Documenter les endpoints et vérifier la spec générée.</p>
-    <details>
-      <summary>💡 Indice</summary>
-      <div class="hint">
-        Utilisez les annotations <a href="https://github.com/swagger-api/swagger-core/wiki/Swagger-2.X---Annotations" target="_blank">Swagger Core</a> (<code>@Operation</code>, <code>@ApiResponse</code>) et la <a href="https://swagger.io/specification/" target="_blank">spécification OpenAPI</a>.
-      </div>
-    </details>
-  </section>
+  <p class="muted">Ressources utiles : Jakarta Messaging Spec, Artemis docs. Pensez à vérifier le pare-feu si la connexion échoue.</p>
 </div>
 
 <script>
-  // Thème (auto + toggle + persistance)
-  (function(){
-    const key = 'theme-preference';
-    const saved = localStorage.getItem(key);
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initial = saved || (prefersDark ? 'dark' : 'light');
-    document.documentElement.setAttribute('data-theme', initial);
-    updateBtn(initial);
+(function(){
+  // Theme auto + toggle
+  const key='theme-preference';
+  const saved=localStorage.getItem(key);
+  const prefersDark=window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const initial=saved|| (prefersDark?'dark':'light');
+  document.documentElement.setAttribute('data-theme', initial);
+  const btn=document.getElementById('themeToggle');
+  function label(m){ btn.textContent = 'Thème : ' + (m==='dark'?'Sombre':'Clair'); }
+  label(initial);
+  btn.addEventListener('click', ()=>{
+    const cur=document.documentElement.getAttribute('data-theme');
+    const next=cur==='light'?'dark':'light';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem(key,next); label(next);
+  });
 
-    document.getElementById('themeToggle').addEventListener('click', () => {
-      const cur = document.documentElement.getAttribute('data-theme');
-      const next = cur === 'light' ? 'dark' : 'light';
-      document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem(key, next);
-      updateBtn(next);
-    });
-
-    function updateBtn(mode){
-      const btn = document.getElementById('themeToggle');
-      btn.textContent = 'Thème : ' + (mode === 'dark' ? 'Sombre' : 'Clair');
-    }
-  })();
-
-  (function(){
-    const btn = document.getElementById('copyCmd');
-    const code = document.getElementById('cmdText');
-    if(!btn) return;
-    btn.addEventListener('click', async ()=>{
-      try{
-        await navigator.clipboard.writeText(code.innerText);
-        btn.textContent = '✅ Copié';
-        setTimeout(()=>btn.textContent='📋 Copier',1200);
-      }catch(e){
-        alert('Copie non supportée');
-      }
-    });
-  })();
+  // Copier les commandes
+  const copyBtn=document.getElementById('copyCmd');
+  const code=document.getElementById('cmdText');
+  copyBtn?.addEventListener('click', async ()=>{
+    try{ await navigator.clipboard.writeText(code.innerText); copyBtn.textContent='Copié'; setTimeout(()=>copyBtn.textContent='Copier',1200); }
+    catch(e){ alert('Copie non supportée'); }
+  });
+})();
 </script>
 </body>
 </html>
