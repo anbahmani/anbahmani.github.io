@@ -68,9 +68,9 @@
         <button class="btn--tiny" id="copyCmd">Copier</button>
       </div>
       <pre><code id="cmdText">mvn clean package
-mvn -Dexec.mainClass="com.example.jmsdemo.ConsumerApp" -DBROKER_URL="tcp://HOST:443" exec:java
+mvn -Dexec.mainClass="com.example.jms.ConsumerApp" -DBROKER_URL="tcp://localhost:61616" exec:java
 # dans un second terminal :
-mvn -Dexec.mainClass="com.example.jmsdemo.ProducerApp" -DBROKER_URL="tcp://HOST:443" -Dexec.args="5" exec:java</code></pre>
+mvn -Dexec.mainClass="com.example.jms.ProducerApp" -DBROKER_URL="tcp://localhost:61616" -Dexec.args="5" exec:java</code></pre>
     </div>
     <p class="muted">Remplacez <code>HOST</code> par l'URL local ou l'IP du broker Artemis configuré par l'enseignant.</p>
   </section>
